@@ -46,7 +46,7 @@ This project is a Python-based Telegram bot that leverages the AutoGen agentic f
 
 2. Run the bot:
     ```sh
-    python bot.py
+    python app.py
     ```
 
 ## Code Overview

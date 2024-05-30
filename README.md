@@ -2,10 +2,6 @@
 
 This project is a Python-based Telegram bot that leverages the AutoGen agentic framework to facilitate conversations. The bot can respond to text messages, convert text to uppercase, and initiate chat sessions using the `rag_agents` module. 
 
-# Demo
-
-In Telegram app, start at chat typing `@BuffaloBuff` and selecting the bot to start chatting.
-
 ## Features
 
 - **Chat Functionality**: The bot initiates and maintains conversations using the `ragproxyagent` and `assistant` from the `rag_agents` module.

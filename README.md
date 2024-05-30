@@ -5,8 +5,6 @@ This project is a Python-based Telegram bot that leverages the AutoGen agentic f
 
 ## Features
 
-- **Start Command**: The bot responds with a welcome message when the `/start` command is issued.
-- **Caps Command**: The bot converts messages to uppercase using the `/caps` command followed by the desired text.
 - **Chat Functionality**: The bot initiates and maintains conversations using the `ragproxyagent` and `assistant` from the `rag_agents` module.
 
 ## Prerequisites

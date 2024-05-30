@@ -36,7 +36,7 @@ This project is a Python-based Telegram bot that leverages the AutoGen agentic f
     echo "TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>" > .env
     ```
 
-## Usage
+## Local Usage
 
 1. Ensure you have your environment variables set up by loading the `.env` file:
     ```python

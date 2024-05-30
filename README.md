@@ -1,7 +1,10 @@
-# BuffaloBuff
 # Telegram Bot with AutoGen's Agentic Framework
 
 This project is a Python-based Telegram bot that leverages the AutoGen agentic framework to facilitate conversations. The bot can respond to text messages, convert text to uppercase, and initiate chat sessions using the `rag_agents` module. 
+
+# Demo
+
+In Telegram app, start at chat typing `@BuffaloBuff` and selecting the bot to start chatting.
 
 ## Features
 
@@ -11,6 +14,7 @@ This project is a Python-based Telegram bot that leverages the AutoGen agentic f
 
 - Python 3.7+
 - A Telegram bot token. Obtain it by creating a new bot through the [BotFather](https://core.telegram.org/bots#botfather).
+- Copy bot name and token
 
 ## Installation
 
@@ -48,6 +52,9 @@ This project is a Python-based Telegram bot that leverages the AutoGen agentic f
     ```sh
     python app.py
     ```
+3. Open Telegram app chat, enter @<your nots name>  
+
+4. Start Chatting!
 
 ## Code Overview
 

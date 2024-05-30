@@ -53,8 +53,7 @@ This project is a Python-based Telegram bot that leverages the AutoGen agentic f
 
 - **Environment Setup**: The bot token is loaded from the `.env` file using the `python-dotenv` library.
 - **Logging**: Configured to provide information about the bot's activity.
-- **Handlers**:
+- **Test Handlers**:
   - `start`: Sends a welcome message when the `/start` command is issued.
   - `caps`: Converts the text following the `/caps` command to uppercase.
-  - `bot`: Engages in conve
 

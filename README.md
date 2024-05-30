@@ -1,3 +1,5 @@
+![alt text](http://url/to/img.png)
+
 # Telegram Bot with AutoGen's Agentic Framework
 
 This project is a Python-based Telegram bot that leverages the AutoGen agentic framework to facilitate conversations. The bot can respond to text messages, convert text to uppercase, and initiate chat sessions using the `rag_agents` module. 

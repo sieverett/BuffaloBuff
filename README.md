@@ -1,4 +1,4 @@
-![alt text]([http://url/to/img.png](https://flowxo.com/wp-content/uploads/2021/03/Telegram-Logo-512x512.png)
+![alt text]([https://flowxo.com/wp-content/uploads/2021/03/Telegram-Logo-512x512.png])
 
 # Telegram Bot with AutoGen's Agentic Framework
 

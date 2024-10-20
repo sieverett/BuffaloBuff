@@ -5,3 +5,8 @@ markdownify
 pyautogen[retrievechat]
 chromadb
 langchain
+Flask
+
+
+
+

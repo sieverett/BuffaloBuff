@@ -53,6 +53,7 @@ def fetch_agent() -> ConversableAgent:
     Returns:
         Tuple containing ragproxyagent and assistant.
     """
+
     config_list = [
         {
             "model": os.environ.get("DEPLOYMENT_NAME"),

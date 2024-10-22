@@ -8,7 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 
-load_dotenv('.env')
+load_dotenv(".env")
 
 # Configure logging
 logging.basicConfig(
@@ -17,20 +17,21 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def send_messages(recipient, messages, sender, config):
+def send_messages(
+    recipient: str, messages: list, sender: str, config: dict
+) -> tuple[list, None]:
     """
     Handles sending messages between the assistant and the user.
 
     Args:
-        recipient: The recipient of the message.
-        messages: List of message dictionaries.
-        sender: The sender of the message.
-        config: Configuration dictionary.
+        recipient (str): The recipient of the message.
+        messages (list): List of message dictionaries.
+        sender (str): The sender of the message.
+        config (dict): Configuration dictionary.
 
     Returns:
-        Tuple containing messages and any additional data.
+        tuple: Contains the processed messages and None.
     """
-    # For debugging purposes, log the messages
     logger.debug(f"Messages before role fix: {messages}")
 
     # Fix role assignments
@@ -40,20 +41,17 @@ def send_messages(recipient, messages, sender, config):
         elif message["name"] == "assistant":
             message["role"] = "assistant"
 
-    # Log the fixed messages
     logger.debug(f"Messages after role fix: {messages}")
-
     return messages, None
 
 
-def fetch_agent() -> ConversableAgent:
+def fetch_agent() -> tuple[ConversableAgent, ConversableAgent]:
     """
     Initializes and returns the RetrieveUserProxyAgent and RetrieveAssistantAgent.
 
     Returns:
-        Tuple containing ragproxyagent and assistant.
+        tuple: Tuple containing ragproxyagent and assistant.
     """
-
     config_list = [
         {
             "model": os.environ.get("DEPLOYMENT_NAME"),
@@ -92,12 +90,8 @@ def fetch_agent() -> ConversableAgent:
             "on the Buffalo Bikes Maintenance Manual ONLY. "
             "Cite the section of the manual the info comes from if available, "
             "otherwise if you have not already given the link to the manual, provide it: "
-            "Example citation: "
-            "See Section 'Chain' in the maintenance manual on page 5. "
-            "OR "
-            "http://www.buffalobicycle.com/storage/documents/wbr_bicycle_maintenance_manual.pdf. "
-            "OR "
-            "No reference available."
+            "See Section 'Chain' in the maintenance manual OR "
+            "http://www.buffalobicycle.com/storage/documents/wbr_bicycle_maintenance_manual.pdf."
         ),
         llm_config={
             "timeout": 600,
@@ -120,20 +114,17 @@ def fetch_agent() -> ConversableAgent:
             "model": config_list[0]["model"],
             "client": chromadb.PersistentClient(path="/tmp"),
             "embedding_model": openai_embedding_function,
-            "get_or_create": True,  # set to False if you don't want to reuse an existing collection
+            "get_or_create": True,
             "custom_text_split_function": text_splitter.split_text,
         },
-        code_execution_config=False,  # set to False if you don't want to execute the code
+        code_execution_config=False,
     )
 
     ragproxyagent.register_reply(
-        [Agent, None],
-        reply_func=send_messages,
-        config={"callback": None},
+        [Agent, None], reply_func=send_messages, config={"callback": None}
     )
 
     logger.info(
         "Initialized RetrieveUserProxyAgent and RetrieveAssistantAgent successfully."
     )
-
     return ragproxyagent, assistant

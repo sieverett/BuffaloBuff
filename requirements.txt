@@ -1,12 +1,7 @@
 python-telegram-bot
 python-dotenv
 pyautogen
-markdownify
 pyautogen[retrievechat]
 chromadb
 langchain
 Flask
-
-
-
-

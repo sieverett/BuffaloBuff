@@ -11,12 +11,12 @@ from telegram.ext import (
     CommandHandler,
     ContextTypes,
 )
-from rag_agents import fetch_agent
+from BuffaloBuff.rag_agents_ import fetch_agent
 from health_server import run as run_health_server
 
 load_dotenv(".env")
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN")
 
 if not TELEGRAM_TOKEN:
     sys.exit("Error: TELEGRAM_BOT_TOKEN environment variable not set.")
@@ -27,17 +27,23 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     stream=sys.stdout,
 )
-
 logger = logging.getLogger(__name__)
 
-# Initialize a dictionary to store user-specific agents and assistants
-user_contexts = {}
+# Dictionary to store user-specific agents and assistants
+user_contexts: dict = {}
 user_contexts_lock = asyncio.Lock()
 
 
-async def get_user_context(user_id):
+async def get_user_context(user_id: int) -> dict | None:
     """
     Asynchronously retrieve or create a user-specific context containing ragproxyagent and assistant.
+
+    Args:
+        user_id (int): Unique identifier for the user.
+
+    Returns:
+        dict: The user's context containing ragproxyagent and assistant.
+        None: If an error occurs during initialization.
     """
     async with user_contexts_lock:
         if user_id not in user_contexts:
@@ -61,7 +67,7 @@ async def get_user_context(user_id):
         return user_contexts[user_id]
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handler for the /start command."""
     user_id = update.effective_user.id
     logger.info(f"User {user_id} initiated /start command.")
@@ -70,7 +76,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def caps(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def caps(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handler for the /caps command."""
     user_id = update.effective_user.id
     args = context.args
@@ -84,7 +90,7 @@ async def caps(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def bot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def bot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handler for regular messages."""
     user_id = update.effective_user.id
     user_message = update.message.text
@@ -103,7 +109,6 @@ async def bot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_history = user_context["chat_history"]
 
     try:
-        # Initiate chat with the user's message and existing chat history
         response = ragproxyagent.initiate_chat(
             assistant,
             silent=False,
@@ -111,18 +116,10 @@ async def bot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             clear_history=False,
             chat_history=chat_history,
         )
-
-        # Log the entire response object for debugging purposes
         logger.debug(f"Raw response object for user {user_id}: {response}")
-
-        # Update chat history with the assistant's response
         user_context["chat_history"] = response.chat_history
-        logger.debug(
-            f"Updated chat history for user {user_id}: {user_context['chat_history']}"
-        )
 
-        # Correct role handling in chat history
-        last_message = response.chat_history[-1]  # Get the last message
+        last_message = response.chat_history[-1]
         if last_message["role"] == "assistant":
             bot_response = last_message["content"].strip()
             logger.info(f"Generated response for user {user_id}: {bot_response}")
@@ -143,11 +140,12 @@ async def bot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def start_health_server_task():
+async def start_health_server_task() -> None:
+    """Start the health server as a background task."""
     await asyncio.to_thread(run_health_server)
 
 
-def main():
+def main() -> None:
     """Main function to start the bot and the HTTP health server."""
     logger.info("Starting the Telegram bot and health server...")
 

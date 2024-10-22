@@ -1,6 +1,6 @@
 # health_server.py
 
-from flask import Flask
+from flask import Flask, jsonify
 import os
 
 app = Flask(__name__)
@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def health_check():
-    return "Bot is running", 200
+    return jsonify({"status": "healthy"}), 200
 
 
 def run():

@@ -7,6 +7,13 @@
 ##
 Welcome to the **BuffaloBuffBot** project! This repository contains the code for a Telegram chatbot integrated with Azure OpenAI, providing mechanical support for World Bicycle Relief's Buffalo Bikes. This guide will walk you through the steps to run this bot locally in Docker, deploy it on Azure, and set up CI/CD pipelines via GitHub Actions.
 
+### About
+The BuffaloBuffBot is a Telegram chatbot that integrates with Azure OpenAI to provide mechanical support for Buffalo Bikes. It is built using Python and the python-telegram-bot framework, enabling communication with Telegram's API. Azure OpenAI processes the user inputs using language models, while a custom rag_agents.py script manages interaction flow and retrieves responses specific to Buffalo Bike maintenance.
+
+The bot is containerized with Docker, allowing it to run seamlessly in both local and cloud environments. For production, the bot is hosted on Azure App Service, leveraging Azure’s managed infrastructure. The setup supports scalability and can be extended to use Azure Kubernetes Service (AKS) for load balancing and auto-scaling as demand increases. CI/CD is managed using GitHub Actions, which automates Docker builds and deployment to Azure.
+
+Health monitoring is integrated via Azure's health services, ensuring application reliability. Logs and diagnostics are handled through Azure Log Stream and the Kudu console to monitor performance and troubleshoot issues. Environment variables like the OpenAI API key and Telegram Bot Token are securely passed through GitHub Actions and configured in Azure for proper functionality.
+
 ### Prerequisites
 
 Before proceeding, ensure you have the following prerequisites installed:

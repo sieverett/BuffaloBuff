@@ -93,7 +93,7 @@ def fetch_agent() -> ConversableAgent:
             "Cite the section of the manual the info comes from if available, "
             "otherwise if you have not already given the link to the manual, provide it: "
             "Example citation: "
-            "See Section 'Chain' in the maintenance manual "
+            "See Section 'Chain' in the maintenance manual on page 5. "
             "OR "
             "http://www.buffalobicycle.com/storage/documents/wbr_bicycle_maintenance_manual.pdf. "
             "OR "

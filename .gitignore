@@ -76,13 +76,18 @@ venv.bak/
 # Pyre (type checker cache)
 .pyre/
 
-# Docker-related
-docker-compose.yml
-Dockerfile
-
 # Ignore VSCode settings
 .vscode/
+.idea/
 
 # Azure-related files
 .azure/
 tmp/
+
+# Database files
+*.sqlite3
+*.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb

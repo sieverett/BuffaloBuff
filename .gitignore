@@ -85,3 +85,4 @@ Dockerfile
 
 # Azure-related files
 .azure/
+tmp/

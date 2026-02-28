@@ -11,7 +11,7 @@ from telegram.ext import (
     CommandHandler,
     ContextTypes,
 )
-from BuffaloBuff.rag_agents_ import fetch_agent
+from rag_agents import fetch_agent
 from health_server import run as run_health_server
 
 load_dotenv(".env")
@@ -29,32 +29,28 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Dictionary to store user-specific agents and assistants
+# Dictionary to store user-specific agents
 user_contexts: dict = {}
 user_contexts_lock = asyncio.Lock()
 
 
 async def get_user_context(user_id: int) -> dict | None:
     """
-    Asynchronously retrieve or create a user-specific context containing ragproxyagent and assistant.
+    Asynchronously retrieve or create a user-specific context containing the agent.
 
     Args:
         user_id (int): Unique identifier for the user.
 
     Returns:
-        dict: The user's context containing ragproxyagent and assistant.
+        dict: The user's context containing the agent.
         None: If an error occurs during initialization.
     """
     async with user_contexts_lock:
         if user_id not in user_contexts:
             try:
-                ragproxyagent, assistant = fetch_agent()
-                ragproxyagent.reset()
-                assistant.clear_history()
+                agent = fetch_agent()
                 user_contexts[user_id] = {
-                    "ragproxyagent": ragproxyagent,
-                    "assistant": assistant,
-                    "chat_history": [],
+                    "agent": agent,
                 }
                 logger.info(f"Initialized context for user {user_id}.")
             except Exception as e:
@@ -104,31 +100,11 @@ async def bot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         )
         return
 
-    ragproxyagent = user_context["ragproxyagent"]
-    assistant = user_context["assistant"]
-    chat_history = user_context["chat_history"]
+    agent = user_context["agent"]
 
     try:
-        response = ragproxyagent.initiate_chat(
-            assistant,
-            silent=False,
-            message=user_message,
-            clear_history=False,
-            chat_history=chat_history,
-        )
-        logger.debug(f"Raw response object for user {user_id}: {response}")
-        user_context["chat_history"] = response.chat_history
-
-        last_message = response.chat_history[-1]
-        if last_message["role"] == "assistant":
-            bot_response = last_message["content"].strip()
-            logger.info(f"Generated response for user {user_id}: {bot_response}")
-        else:
-            bot_response = "I'm sorry, I couldn't generate a valid response."
-            logger.warning(
-                f"No valid assistant message found in chat history for user {user_id}."
-            )
-
+        bot_response = await asyncio.to_thread(agent.chat, user_message)
+        logger.info(f"Generated response for user {user_id}: {bot_response[:100]}...")
         await context.bot.send_message(
             chat_id=update.effective_chat.id, text=bot_response
         )

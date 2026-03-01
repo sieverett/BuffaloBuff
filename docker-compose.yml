@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-    volumes:
-      - "/codebase:/codebase"
-      - "/storage:/storage"
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    ports:
+      - "8080:8080"
     restart: always

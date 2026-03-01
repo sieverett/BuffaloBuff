@@ -1,7 +1,8 @@
-python-telegram-bot
-python-dotenv
-pyautogen
-pyautogen[retrievechat]
-chromadb
-langchain
-Flask
+python-telegram-bot>=20.7,<21
+python-dotenv>=1.0,<2
+anthropic>=0.39,<1
+chromadb>=0.4,<0.5
+langchain>=0.1,<0.3
+langchain-community>=0.1,<0.3
+pypdf>=4.0,<5
+Flask>=3.0,<4

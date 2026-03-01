@@ -8,10 +8,6 @@ from dotenv import load_dotenv
 
 load_dotenv(".env")
 
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
 logger = logging.getLogger(__name__)
 
 SYSTEM_MESSAGE = (
@@ -35,6 +31,13 @@ SYSTEM_MESSAGE = (
     "http://www.buffalobicycle.com/storage/documents/wbr_bicycle_maintenance_manual.pdf."
 )
 
+# Shared ChromaDB client — initialised once, reused across all user agents
+_chroma_client = chromadb.PersistentClient(path="/tmp/chroma_db")
+
+_text_splitter = RecursiveCharacterTextSplitter(
+    separators=["\n\n", "\n", "\r", "\t"]
+)
+
 
 class BuffaloBuffAgent:
     """RAG agent that uses ChromaDB for retrieval and Anthropic Claude for generation."""
@@ -45,12 +48,7 @@ class BuffaloBuffAgent:
 
         default_ef = embedding_functions.DefaultEmbeddingFunction()
 
-        self.text_splitter = RecursiveCharacterTextSplitter(
-            separators=["\n\n", "\n", "\r", "\t"]
-        )
-
-        self.chroma_client = chromadb.PersistentClient(path="/tmp/chroma_db")
-        self.collection = self.chroma_client.get_or_create_collection(
+        self.collection = _chroma_client.get_or_create_collection(
             name="buffalo_manual",
             embedding_function=default_ef,
         )
@@ -91,7 +89,7 @@ class BuffaloBuffAgent:
                 full_text = ""
 
             if full_text:
-                chunks = self.text_splitter.split_text(full_text)
+                chunks = _text_splitter.split_text(full_text)
                 ids = [f"chunk_{i}" for i in range(len(chunks))]
                 self.collection.add(documents=chunks, ids=ids)
                 logger.info(f"Indexed {len(chunks)} chunks from the manual.")
